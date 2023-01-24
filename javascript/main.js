@@ -7,25 +7,31 @@ var marker;
 fmd();
 
 btn.addEventListener('click', async () => {
-    let ip_address = input.value;
-    if ( ip_address === '' ) return;
+    let value = input.value;
+    if ( value === '' ) return;
 
-    let endpoint = `http://ip-api.com/json/${ip_address}?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,offset,currency,isp,org,as,query`;
-    
-    let data = await fetchData(endpoint);
+    let endpoint;
 
-    if ( data.status === 'fail' ) return;
+    const regax = /\d+.\d+/i;
+    if ( value.match(regax) )
+        endpoint = `https://geo.ipify.org/api/v2/country,city?apiKey=at_oTXWpnrpfwq0HuMU7ptKCsyaLsfg7&ipAddress=${value}`;
+    else
+        endpoint = `https://geo.ipify.org/api/v2/country,city?apiKey=at_oTXWpnrpfwq0HuMU7ptKCsyaLsfg7&domain=${value}`;
     
+    let res = await fetchData(endpoint);
+    
+    if ( res.statusText !== 'OK' ) return;
+    
+    let data = res.data;
     loadingViewers();
     
     // make a mark on the map
     if ( marker !== undefined ) map.removeLayer(marker);
-    marker = L.marker([data.lat, data.lon]).addTo(map);
+    marker = L.marker([data.location.lat, data.location.lng]).addTo(map);
     marker.bindPopup(`<div style="text-align: center;">
-    <b>${data.country}</b><br />
-    <span><b>city:</b> ${data.city}</span><br />
-    <span><b>region:</b> ${data.regionName}</span><br />
-    <span><b>district:</b> ${data.district || 'null'}</span></div>`)
+    <b>${data.location.country}</b><br />
+    <span><b>region:</b> ${data.location.region}</span><br />
+    <span><b>asn:</b> ${data.as.asn || 'null'}</span></div>`)
     .openPopup();
 
     fillViewData(data);
@@ -37,13 +43,13 @@ btn.addEventListener('click', async () => {
 */
 async function fetchData(_endpoint) {
     const res = await axios.get(_endpoint);
-    return res.data;
+    return res;
 }
 
 function fillViewData(_data) {
-    viewers[0].children[1].textContent = _data.query;
-    viewers[1].children[1].textContent = `${_data.city}, ${_data.region} ${_data.zip}`;
-    viewers[2].children[1].textContent = `UTC ${_data.offset}`;
+    viewers[0].children[1].textContent = _data.ip || _data.as.domain;
+    viewers[1].children[1].textContent = `${_data.location.country}, ${_data.location.region} ${_data.as.asn}`;
+    viewers[2].children[1].textContent = `UTC ${_data.location.timezone}`;
     viewers[3].children[1].textContent = _data.isp;
 }
 
@@ -58,23 +64,22 @@ function loadingViewers() {
 // fetch my data and show them \\
 async function fmd() {
     loadingViewers();
-    let endpoint = `http://api.ipstack.com/134.201.250.155?access_key=b039d604119b1e0262f1a50228f97b3c`;
+    let endpoint = "https://geo.ipify.org/api/v2/country,city?apiKey=at_oTXWpnrpfwq0HuMU7ptKCsyaLsfg7";
 
-    const data = await fetchData(endpoint);
+    const res = await fetchData(endpoint);
+
+    if ( res === undefined || res.statusText !== 'OK' ) return;
     
-    console.log(data)
+    let data = res.data;
 
-    // if ( data === undefined || data.status === 'fail' || Object.keys(data).length === 0 ) return;
+    // make a mark on the map
+    if ( marker !== undefined ) map.removeLayer(marker);
+    marker = L.marker([data.location.lat, data.location.lng]).addTo(map);
+    marker.bindPopup(`<div style="text-align: center;">
+    <b>${data.location.country}</b><br />
+    <span><b>region:</b> ${data.location.region}</span><br />
+    <span><b>asn:</b> ${data.as.asn || 'null'}</span></div>`)
+    .openPopup();
 
-    // // make a mark on the map
-    // if ( marker !== undefined ) map.removeLayer(marker);
-    // marker = L.marker([data.lat, data.lon]).addTo(map);
-    // marker.bindPopup(`<div style="text-align: center;">
-    // <b>${data.country}</b><br />
-    // <span><b>city:</b> ${data.city}</span><br />
-    // <span><b>region:</b> ${data.regionName}</span><br />
-    // <span><b>district:</b> ${data.district || 'null'}</span></div>`)
-    // .openPopup();
-
-    // fillViewData(data);
+    fillViewData(data);
 }
