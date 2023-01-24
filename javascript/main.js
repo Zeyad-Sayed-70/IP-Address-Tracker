@@ -5,7 +5,7 @@ const viewers = document.querySelectorAll('.view div');
 var marker;
 
 
-// fmd();
+fmd();
 
 btn.addEventListener('click', async () => {
     let ip_address = input.value;
@@ -37,10 +37,8 @@ btn.addEventListener('click', async () => {
     @params (_endpoint: "spesific endpoint to fetched")    
 */
 async function fetchData(_endpoint) {
-    const res = await fetch(_endpoint)
-    .then(response => response.json());
-
-    return res;
+    const res = await axios.get(_endpoint);
+    return res.data;
 }
 
 function fillViewData(_data) {
