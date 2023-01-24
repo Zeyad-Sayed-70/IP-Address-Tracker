@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP-TRACKER</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <!-- Add Leaflet Files -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+
+    <script defer src="https://kit.fontawesome.com/9a459a4906.js" crossorigin="anonymous"></script>
+    
+    <!-- Create Our Map -->
+    <script defer src="./javascript/map.js"></script>
+    <!-- Main Js File -->
+    <script defer src="./javascript/main.js"></script>
+</head>
+<body>
+    <main>
+        <div id="input">
+            <h1>IP Address Tracker</h1>
+            <div class="form">
+                <input type="text" placeholder="Search for any address or domain">
+                <button><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="view">
+                <div>
+                    <span>ip address</span>
+                    <h2>192.212.174.101</h2>
+                </div>
+                <div>
+                    <span>location</span>
+                    <h2>Brooklyn, NY 10001</h2>
+                </div>
+                <div>
+                    <span>timezone</span>
+                    <h2>UTC -05:00</h2>
+                </div>
+                <div>
+                    <span>isp</span>
+                    <h2>SpaceX Starlink</h2>
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+    </main>
+</body>
+</html>
