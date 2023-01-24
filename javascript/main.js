@@ -4,6 +4,8 @@ const btn = document.querySelector('.form button');
 const viewers = document.querySelectorAll('.view div');
 var marker;
 
+fmd();
+
 btn.addEventListener('click', async () => {
     let ip_address = input.value;
     if ( ip_address === '' ) return;
@@ -74,5 +76,3 @@ async function fmd() {
 
     fillViewData(data);
 }
-
-fmd();
