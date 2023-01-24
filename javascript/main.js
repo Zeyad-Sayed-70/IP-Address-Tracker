@@ -4,6 +4,7 @@ const btn = document.querySelector('.form button');
 const viewers = document.querySelectorAll('.view div');
 var marker;
 
+
 fmd();
 
 btn.addEventListener('click', async () => {
@@ -35,21 +36,21 @@ btn.addEventListener('click', async () => {
     Fetch IP Data
     @params (_endpoint: "spesific endpoint to fetched")    
 */
-const fetchData = async (_endpoint) => {
+async function fetchData(_endpoint) {
     const res = await fetch(_endpoint)
     .then(response => response.json())
 
     return res;
 }
 
-const fillViewData = (_data) => {
+function fillViewData(_data) {
     viewers[0].children[1].textContent = _data.query;
     viewers[1].children[1].textContent = `${_data.city}, ${_data.region} ${_data.zip}`;
     viewers[2].children[1].textContent = `UTC ${_data.offset}`;
     viewers[3].children[1].textContent = _data.isp;
 }
 
-const loadingViewers = () => {
+function loadingViewers() {
     viewers[0].children[1].textContent = "Loading...";
     viewers[1].children[1].textContent = "Loading...";
     viewers[2].children[1].textContent = "Loading...";
@@ -63,6 +64,8 @@ async function fmd() {
     let endpoint = `http://ip-api.com/json/?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,offset,currency,isp,org,as,query`;
 
     const data = await fetchData(endpoint);
+    
+    if ( data === undefined || Object.keys(data).length === 0 ) return;
 
     // make a mark on the map
     if ( marker !== undefined ) map.removeLayer(marker);
