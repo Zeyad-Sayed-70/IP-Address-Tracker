@@ -37,10 +37,8 @@ btn.addEventListener('click', async () => {
     @params (_endpoint: "spesific endpoint to fetched")    
 */
 async function fetchData(_endpoint) {
-    const res = await fetch(_endpoint, {
-        referrerPolicy: 'unsafe-url'
-    })
-    .then(response => response.json())
+    const res = await fetch(_endpoint)
+    .then(response => response.json());
 
     return res;
 }
@@ -67,7 +65,7 @@ async function fmd() {
 
     const data = await fetchData(endpoint);
     
-    if ( data === undefined || Object.keys(data).length === 0 ) return;
+    if ( data === undefined || data.status === 'fail' || Object.keys(data).length === 0 ) return;
 
     // make a mark on the map
     if ( marker !== undefined ) map.removeLayer(marker);
