@@ -37,7 +37,9 @@ btn.addEventListener('click', async () => {
     @params (_endpoint: "spesific endpoint to fetched")    
 */
 async function fetchData(_endpoint) {
-    const res = await fetch(_endpoint)
+    const res = await fetch(_endpoint, {
+        referrerPolicy: 'unsafe-url'
+    })
     .then(response => response.json())
 
     return res;
