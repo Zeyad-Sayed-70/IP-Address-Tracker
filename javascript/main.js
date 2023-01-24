@@ -5,7 +5,7 @@ const viewers = document.querySelectorAll('.view div');
 var marker;
 
 
-fmd();
+// fmd();
 
 btn.addEventListener('click', async () => {
     let ip_address = input.value;
